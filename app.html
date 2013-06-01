@@ -13,30 +13,35 @@
             return t;
         }
         function draw_lerp(t) {
-            var p0 = {x : 10, y:45};
-            var p1 = {x : 350, y:45};
+            var p0 = {x : 10, y:145, r:255, g:0, b:0};
+            var p1 = {x : 350, y:145, r:0, g:0, b:255};
             t = clamp(t);
             var newP = {};
             newP.x = (1-t)*p0.x + t*(p1.x);
             newP.y = (1-t)*p0.y + t*(p1.y);
+            
+            newP.r = Math.floor((1-t)*p0.r + t*(p1.r));
+            newP.g = Math.floor((1-t)*p0.g + t*(p1.g));
+            newP.b = Math.floor((1-t)*p0.b + t*(p1.b));
+            
             var canvas = document.getElementById('canvas_lerp');
             if (canvas.getContext) {
                 var ctx = canvas.getContext("2d");
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "rgb(255,0,0)";
+                ctx.fillStyle = "rgb(" + p0.r + "," + p0.g +"," + p0.b + ")";
                 ctx.fillRect (p0.x, p0.y, 10, 10);
 
-                ctx.fillStyle = "rgb(0, 0, 255)";
+                ctx.fillStyle = "rgb(" + p1.r + "," + p1.g +"," + p1.b + ")";
                 ctx.fillRect (p1.x, p1.y, 10, 10);
-
-                ctx.fillStyle = "rgb(0, 0, 0)";
+                var newColor = "rgb(" + newP.r + "," + newP.g +"," + newP.b + ")";
+                ctx.fillStyle = newColor;
                 ctx.fillRect (newP.x, newP.y, 10, 10);
             }
         }
         function draw_quad(t) {
-            var p0 = {x : 10, y:45};
-            var p2 = {x : 550, y:45};
-            var p1 = {x : 300, y:20};
+            var p0 = {x : 10, y:145, r:255, g:0, b:0};
+            var p2 = {x : 550, y:145, r:0, g:0, b:255};
+            var p1 = {x : 300, y:20, r:0, g:255, b:0};
             t = clamp(t);
             var newP = {};
             newP.x = Math.pow((1-t), 2)*p0.x +
@@ -46,28 +51,42 @@
             newP.y = Math.pow((1-t),2)*p0.y +
                     2*(1-t)*t*p1.y      +
                     Math.pow(t,2)*p2.y;
+            
+            newP.r = Math.floor(Math.pow((1-t), 2)*p0.r +
+                     2*(1-t)*t*p1.r     +
+                     Math.pow(t,2)*p2.r);
+            newP.g = Math.floor(Math.pow((1-t), 2)*p0.g +
+                     2*(1-t)*t*p1.g     +
+                     Math.pow(t,2)*p2.g);
+            newP.b = Math.floor(Math.pow((1-t), 2)*p0.b +
+                     2*(1-t)*t*p1.b     +
+                     Math.pow(t,2)*p2.b);
+            
+            
             var canvas = document.getElementById('canvas_quad');
             if (canvas.getContext) {
                 var ctx = canvas.getContext("2d");
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "rgb(255,0,0)";
+                ctx.fillStyle = "rgb(" + p0.r + "," + p0.g +"," + p0.b + ")";
                 ctx.fillRect (p0.x, p0.y, 10, 10);
 
-                ctx.fillStyle = "rgb(0, 0, 255)";
+                ctx.fillStyle = "rgb(" + p1.r + "," + p1.g +"," + p1.b + ")";
                 ctx.fillRect (p1.x, p1.y, 10, 10);
 
                 ctx.fillStyle = "rgb(0, 255, 0)";
+                ctx.fillStyle = "rgb(" + p2.r + "," + p2.g +"," + p2.b + ")";
                 ctx.fillRect (p2.x, p2.y, 10, 10);
 
-                ctx.fillStyle = "rgb(0, 0, 0)";
+                var newColor = "rgb(" + newP.r + "," + newP.g +"," + newP.b + ")";
+                ctx.fillStyle = newColor;
                 ctx.fillRect (newP.x, newP.y, 10, 10);
             }
         }
     </script>
 </head>
 <body>
-    <canvas id="canvas_lerp" width="600" height="100"></canvas>
-    <canvas id="canvas_quad" width="600" height="100"></canvas>
+    <canvas id="canvas_lerp" width="600" height="400"></canvas>
+    <canvas id="canvas_quad" width="600" height="400"></canvas>
     <script>
         setInterval(function() {
             t = Math.sin(new Date().getTime()/1000)/2+0.5;
