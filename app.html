@@ -12,17 +12,25 @@
             }
             return t;
         }
+        function lerp(t, v0, v1) {
+            return (1-t)*v0 + t*(v1);
+        }      
+        function quad(t, v0, v1, v2) {
+            return Math.pow((1-t), 2)*v0 +
+                        2*(1-t)*t*v1     +
+                        Math.pow(t,2)*v2;            
+        }
         function draw_lerp(t) {
             var p0 = {x : 10, y:145, r:255, g:0, b:0};
             var p1 = {x : 350, y:145, r:0, g:0, b:255};
             t = clamp(t);
             var newP = {};
-            newP.x = (1-t)*p0.x + t*(p1.x);
-            newP.y = (1-t)*p0.y + t*(p1.y);
+            newP.x = lerp(t, p0.x, p1.x);
+            newP.y = lerp(t, p0.y, p1.y);
             
-            newP.r = Math.floor((1-t)*p0.r + t*(p1.r));
-            newP.g = Math.floor((1-t)*p0.g + t*(p1.g));
-            newP.b = Math.floor((1-t)*p0.b + t*(p1.b));
+            newP.r = Math.floor(lerp(t, p0.r, p1.r));
+            newP.g = Math.floor(lerp(t, p0.g, p1.g));
+            newP.b = Math.floor(lerp(t, p0.b, p1.b));
             
             var canvas = document.getElementById('canvas_lerp');
             if (canvas.getContext) {
@@ -44,23 +52,12 @@
             var p1 = {x : 300, y:20, r:0, g:255, b:0};
             t = clamp(t);
             var newP = {};
-            newP.x = Math.pow((1-t), 2)*p0.x +
-                     2*(1-t)*t*p1.x     +
-                     Math.pow(t,2)*p2.x;
-
-            newP.y = Math.pow((1-t),2)*p0.y +
-                    2*(1-t)*t*p1.y      +
-                    Math.pow(t,2)*p2.y;
+            newP.x = quad(t, p0.x, p1.x, p2.x);            
+            newP.y = quad(t, p0.y, p1.y, p2.y);
             
-            newP.r = Math.floor(Math.pow((1-t), 2)*p0.r +
-                     2*(1-t)*t*p1.r     +
-                     Math.pow(t,2)*p2.r);
-            newP.g = Math.floor(Math.pow((1-t), 2)*p0.g +
-                     2*(1-t)*t*p1.g     +
-                     Math.pow(t,2)*p2.g);
-            newP.b = Math.floor(Math.pow((1-t), 2)*p0.b +
-                     2*(1-t)*t*p1.b     +
-                     Math.pow(t,2)*p2.b);
+            newP.r = Math.floor(quad(t, p0.r, p1.r, p2.r));
+            newP.g = Math.floor(quad(t, p0.g, p1.g, p2.g));
+            newP.b = Math.floor(quad(t, p0.b, p1.b, p2.b));
             
             
             var canvas = document.getElementById('canvas_quad');
