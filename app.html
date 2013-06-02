@@ -61,10 +61,25 @@
             newP.x = quad(t, p0.x, p1.x, p2.x);            
             newP.y = quad(t, p0.y, p1.y, p2.y);
             
+            var lerp1 = {};
+            lerp1.x = lerp(t, p0.x, p1.x);            
+            lerp1.y = lerp(t, p0.y, p1.y);
+            
+            var lerp2 = {};
+            lerp2.x = lerp(t, p1.x, p2.x);            
+            lerp2.y = lerp(t, p1.y, p2.y);
+            
             newP.r = Math.floor(quad(t, p0.r, p1.r, p2.r));
             newP.g = Math.floor(quad(t, p0.g, p1.g, p2.g));
             newP.b = Math.floor(quad(t, p0.b, p1.b, p2.b));
             
+            lerp1.r = Math.floor(lerp(t, p0.r, p1.r));
+            lerp1.g = Math.floor(lerp(t, p0.g, p1.g));
+            lerp1.b = Math.floor(lerp(t, p0.b, p1.b));
+            
+            lerp2.r = Math.floor(lerp(t, p1.r, p2.r));
+            lerp2.g = Math.floor(lerp(t, p1.g, p2.g));
+            lerp2.b = Math.floor(lerp(t, p1.b, p2.b));
             
             var canvas = document.getElementById('canvas_quad');
             if (canvas.getContext) {
@@ -83,6 +98,22 @@
                 var newColor = "rgb(" + newP.r + "," + newP.g +"," + newP.b + ")";
                 ctx.fillStyle = newColor;
                 ctx.fillRect (newP.x, newP.y, 10, 10);
+                
+                var newColor = "rgb(" + lerp1.r + "," + lerp1.g +"," + lerp1.b + ")";
+                ctx.fillStyle = newColor;
+                ctx.fillRect (lerp1.x, lerp1.y, 10, 10);
+                
+                var newColor = "rgb(" + lerp2.r + "," + lerp2.g +"," + lerp2.b + ")";
+                ctx.fillStyle = newColor;
+                ctx.fillRect (lerp2.x, lerp2.y, 10, 10);
+                
+                ctx.fillStyle = "rgb(0,0,0)";
+                ctx.beginPath();
+                ctx.moveTo(lerp1.x, lerp1.y);
+                ctx.lineTo(lerp2.x, lerp2.y);
+                ctx.closePath();
+                ctx.stroke();
+                
             }
         }
         function draw_cubic(t) {
